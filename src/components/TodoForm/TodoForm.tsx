@@ -9,7 +9,7 @@ type Props = {
   onSubmit: (title: string) => Promise<void>;
   setTitleError: (value: boolean) => void;
   updateTodo: (todo: Todo) => void;
-  setToggleError: (toggle: boolean) => void;
+  setTempArray: (todo: Todo) => void;
 };
 
 export const TodoForm: React.FC<Props> = ({
@@ -17,12 +17,12 @@ export const TodoForm: React.FC<Props> = ({
   setTitleError,
   todos,
   updateTodo,
-  setToggleError,
+  setTempArray,
 }) => {
   const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const titleField = useRef<HTMLInputElement>(null);
-  const [trig, setTrig] = useState(false);
+  const trig = todos.every(({ completed }) => completed);
 
   useEffect(() => {
     titleField.current?.focus();
@@ -52,9 +52,9 @@ export const TodoForm: React.FC<Props> = ({
 
   const handleToggleAllTodo = () => {
     if (!trig) {
-      setToggleError(true);
-
       todos.forEach(currentTodo => {
+        setTempArray(currentTodo);
+
         const newTodo = {
           ...currentTodo,
           completed: (currentTodo.completed = true),
@@ -62,19 +62,11 @@ export const TodoForm: React.FC<Props> = ({
 
         updateTodo(newTodo);
       });
-
-      setToggleError(false);
-
-      setTrig(true);
     }
 
     if (trig) {
-      setToggleError(true);
-
-      setToggleError(true);
-
       todos.forEach(currentTodo => {
-        setToggleError(true);
+        setTempArray(currentTodo);
 
         const newTodo = {
           ...currentTodo,
@@ -82,10 +74,7 @@ export const TodoForm: React.FC<Props> = ({
         };
 
         updateTodo(newTodo);
-        setToggleError(false);
       });
-
-      setTrig(false);
     }
   };
 

@@ -5,14 +5,16 @@ type Props = {
   todos: Todo[];
   updateTodo: (todo: Todo) => void;
   deletTodo: (todo: Todo) => void;
-  toggleError?: boolean;
+  array: Todo[];
+  setTempArray: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   updateTodo,
   deletTodo,
-  toggleError,
+  array,
+  setTempArray,
 }) => {
   return (
     <>
@@ -23,7 +25,8 @@ export const TodoList: React.FC<Props> = ({
             todo={todo}
             updateTodo={updateTodo}
             deletTodo={deletTodo}
-            toggleError={toggleError}
+            array={array}
+            setTempArray={setTempArray}
           />
         </section>
       ))}

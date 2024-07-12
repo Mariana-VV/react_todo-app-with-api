@@ -7,19 +7,19 @@ type Props = {
   todo: Todo;
   updateTodo?: (todo: Todo) => void;
   deletTodo?: (todo: Todo) => void;
-  toggleError?: boolean;
+  array: Todo[];
+  setTempArray: (todo: Todo) => void;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   updateTodo = () => {},
   deletTodo = () => {},
-  toggleError,
+  array,
+  setTempArray,
 }) => {
-  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
   const [isEdited, setIsEdited] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleIsCompleted = (paramTodo: Todo) => {
     const newTodo = { ...paramTodo, completed: !paramTodo.completed };
@@ -28,7 +28,7 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   const handleDeleteButton = () => {
-    setCurrentTodo(todo);
+    setTempArray(todo);
     deletTodo(todo);
   };
 
@@ -47,14 +47,13 @@ export const TodoItem: React.FC<Props> = ({
       setIsEdited(false);
     }
 
-    setIsSubmitting(true);
+    // setIsSubmitting(true);
     if (todo.title !== tempTitle) {
       const newTodo = { ...todo, title: tempTitle };
 
       updateTodo(newTodo);
     }
 
-    setIsSubmitting(false);
     setIsEdited(false);
   };
 
@@ -120,7 +119,7 @@ export const TodoItem: React.FC<Props> = ({
       <div
         data-cy="TodoLoader"
         className={classNames('modal overlay', {
-          'is-active': !todo.id || currentTodo || isSubmitting || toggleError,
+          'is-active': !todo.id || array.includes(todo),
         })}
       >
         <div className="modal-background has-background-white-ter" />

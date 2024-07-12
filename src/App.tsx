@@ -37,10 +37,13 @@ export const App: React.FC = () => {
   const [addError, setAddError] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [updateError, setUpdateError] = useState(false);
-  const [toggleError, setToggleError] = useState(false);
   const [status, setStatus] = useState('all');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
-  // const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
+  const [tempArray, setTempArray] = useState<Todo[]>([]);
+
+  const temp = (currentTodo: Todo) => {
+    setTempArray(prevArray => [...prevArray, currentTodo]);
+  };
 
   const filteredTodos = getTodosByStatus(status, todos);
 
@@ -142,7 +145,7 @@ export const App: React.FC = () => {
             setTitleError={setTitleError}
             todos={todos}
             updateTodo={updateTodo}
-            setToggleError={setToggleError}
+            setTempArray={temp}
           />
         </header>
 
@@ -150,10 +153,13 @@ export const App: React.FC = () => {
           todos={filteredTodos}
           updateTodo={updateTodo}
           deletTodo={deleteTodo}
-          toggleError={toggleError}
+          array={tempArray}
+          setTempArray={temp}
         />
 
-        {tempTodo && <TodoItem todo={tempTodo} />}
+        {tempTodo && (
+          <TodoItem todo={tempTodo} array={tempArray} setTempArray={temp} />
+        )}
 
         {!!todos.length && (
           // {/* Hide the footer if there are no todos */}
