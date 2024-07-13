@@ -86,7 +86,7 @@ export const App: React.FC = () => {
     updatedTodo: Todo,
     successUpdateState?: VoidFunction,
   ): Promise<void> {
-    todosFromServer
+    return todosFromServer
       .updateTodos(updatedTodo)
       .then((todo: Todo) => {
         setTodos(currentTodos => {

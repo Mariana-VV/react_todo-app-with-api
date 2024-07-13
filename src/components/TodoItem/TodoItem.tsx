@@ -45,6 +45,7 @@ export const TodoItem: React.FC<Props> = ({
     event.preventDefault();
 
     if (!tempTitle) {
+      setTempArray(todo);
       deletTodo(todo);
     }
 
