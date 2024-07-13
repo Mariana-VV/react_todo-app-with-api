@@ -40,6 +40,7 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState('all');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [tempArray, setTempArray] = useState<Todo[]>([]);
+  const [edit, setEdit] = useState(false);
 
   const temp = (currentTodo: Todo) => {
     setTempArray(prevArray => [...prevArray, currentTodo]);
@@ -82,7 +83,7 @@ export const App: React.FC = () => {
     }
   }
 
-  const updateTodo = (updatedTodo: Todo) => {
+  async function updateTodo(updatedTodo: Todo) {
     todosFromServer
       .updateTodos(updatedTodo)
       .then((todo: Todo) =>
@@ -99,9 +100,11 @@ export const App: React.FC = () => {
       )
       .catch(() => {
         setUpdateError(true);
+        setEdit(true);
         wait(3000).then(() => setUpdateError(false));
+        setTempArray([]);
       });
-  };
+  }
 
   const deleteTodo = (paramTodo: Todo) => {
     todosFromServer
@@ -155,10 +158,11 @@ export const App: React.FC = () => {
           deletTodo={deleteTodo}
           array={tempArray}
           setTempArray={temp}
+          edit={edit}
         />
 
         {tempTodo && (
-          <TodoItem todo={tempTodo} array={tempArray} setTempArray={temp} />
+          <TodoItem todo={tempTodo} tempArray={tempArray} setTempArray={temp} />
         )}
 
         {!!todos.length && (
@@ -179,7 +183,14 @@ export const App: React.FC = () => {
         data-cy="ErrorNotification"
         className={classNames(
           'notification is-danger is-light has-text-weight-normal',
-          { hidden: !titleError && !loadError && !addError && !deleteError },
+          {
+            hidden:
+              !titleError &&
+              !loadError &&
+              !addError &&
+              !deleteError &&
+              !updateError,
+          },
         )}
       >
         <button data-cy="HideErrorButton" type="button" className="delete" />

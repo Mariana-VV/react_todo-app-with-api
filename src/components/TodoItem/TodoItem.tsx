@@ -5,9 +5,9 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 
 type Props = {
   todo: Todo;
-  updateTodo?: (todo: Todo) => void;
+  updateTodo?: (todo: Todo) => Promise<void>;
   deletTodo?: (todo: Todo) => void;
-  array: Todo[];
+  tempArray: Todo[];
   setTempArray: (todo: Todo) => void;
 };
 
@@ -15,13 +15,14 @@ export const TodoItem: React.FC<Props> = ({
   todo,
   updateTodo = () => {},
   deletTodo = () => {},
-  array,
+  tempArray,
   setTempArray,
 }) => {
   const [isEdited, setIsEdited] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
 
   const handleIsCompleted = (paramTodo: Todo) => {
+    setTempArray(todo);
     const newTodo = { ...paramTodo, completed: !paramTodo.completed };
 
     updateTodo(newTodo);
@@ -47,19 +48,22 @@ export const TodoItem: React.FC<Props> = ({
       setIsEdited(false);
     }
 
-    // setIsSubmitting(true);
     if (todo.title !== tempTitle) {
-      const newTodo = { ...todo, title: tempTitle };
+      setTempArray(todo);
 
-      updateTodo(newTodo);
+      const newTodo = { ...todo, title: tempTitle.trim() };
+
+      return updateTodo(newTodo);
     }
 
     setIsEdited(false);
   };
 
-  // const handleEscClick = () => {
-
-  // }
+  const handleOnEsc = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === 'Escape') {
+      setIsEdited(false);
+    }
+  };
 
   return (
     <div
@@ -104,13 +108,14 @@ export const TodoItem: React.FC<Props> = ({
           <input
             // name="title"
             value={tempTitle}
+            autoFocus
             data-cy="TodoTitleField"
             type="text"
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             onChange={handleDoubleClick}
             onBlur={handleFormSubmit}
-            // onKeyDown={handleEscClick}
+            onKeyUp={handleOnEsc}
           />
         </form>
       )}
@@ -119,7 +124,7 @@ export const TodoItem: React.FC<Props> = ({
       <div
         data-cy="TodoLoader"
         className={classNames('modal overlay', {
-          'is-active': !todo.id || array.includes(todo),
+          'is-active': !todo.id || tempArray.includes(todo),
         })}
       >
         <div className="modal-background has-background-white-ter" />

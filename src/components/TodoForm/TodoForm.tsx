@@ -51,18 +51,17 @@ export const TodoForm: React.FC<Props> = ({
   };
 
   const handleToggleAllTodo = () => {
-    if (!trig) {
-      todos.forEach(currentTodo => {
-        setTempArray(currentTodo);
-
+    todos.forEach(currentTodo => {
+      setTempArray(currentTodo);
+      if (!currentTodo.completed) {
         const newTodo = {
           ...currentTodo,
           completed: (currentTodo.completed = true),
         };
 
         updateTodo(newTodo);
-      });
-    }
+      }
+    });
 
     if (trig) {
       todos.forEach(currentTodo => {
@@ -81,12 +80,14 @@ export const TodoForm: React.FC<Props> = ({
   return (
     <>
       {/* this button should have `active` class only if all todos are completed */}
-      <button
-        type="button"
-        className={classNames('todoapp__toggle-all', { active: trig })}
-        data-cy="ToggleAllButton"
-        onClick={handleToggleAllTodo}
-      />
+      {!!todos.length && (
+        <button
+          type="button"
+          className={classNames('todoapp__toggle-all', { active: trig })}
+          data-cy="ToggleAllButton"
+          onClick={handleToggleAllTodo}
+        />
+      )}
       <form onSubmit={handleFormSubmit}>
         <input
           value={title}

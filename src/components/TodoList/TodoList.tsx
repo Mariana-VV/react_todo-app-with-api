@@ -3,10 +3,11 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
-  updateTodo: (todo: Todo) => void;
+  updateTodo: (todo: Todo) => Promise<void>;
   deletTodo: (todo: Todo) => void;
   array: Todo[];
   setTempArray: (todo: Todo) => void;
+  edit: boolean;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -25,7 +26,7 @@ export const TodoList: React.FC<Props> = ({
             todo={todo}
             updateTodo={updateTodo}
             deletTodo={deletTodo}
-            array={array}
+            tempArray={array}
             setTempArray={setTempArray}
           />
         </section>
