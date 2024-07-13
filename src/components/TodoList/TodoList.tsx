@@ -3,11 +3,10 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
-  updateTodo: (todo: Todo) => Promise<void>;
+  updateTodo: (todo: Todo) => void;
   deletTodo: (todo: Todo) => void;
   array: Todo[];
   setTempArray: (todo: Todo) => void;
-  edit: boolean;
 };
 
 export const TodoList: React.FC<Props> = ({

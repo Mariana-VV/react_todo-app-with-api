@@ -40,7 +40,6 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState('all');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [tempArray, setTempArray] = useState<Todo[]>([]);
-  const [edit, setEdit] = useState(false);
 
   const temp = (currentTodo: Todo) => {
     setTempArray(prevArray => [...prevArray, currentTodo]);
@@ -83,10 +82,13 @@ export const App: React.FC = () => {
     }
   }
 
-  async function updateTodo(updatedTodo: Todo) {
+  async function updateTodo(
+    updatedTodo: Todo,
+    successUpdateState?: VoidFunction,
+  ): Promise<void> {
     todosFromServer
       .updateTodos(updatedTodo)
-      .then((todo: Todo) =>
+      .then((todo: Todo) => {
         setTodos(currentTodos => {
           const newTodos = [...currentTodos];
           const index = newTodos.findIndex(
@@ -96,11 +98,12 @@ export const App: React.FC = () => {
           newTodos.splice(index, 1, todo);
 
           return newTodos;
-        }),
-      )
+        });
+
+        successUpdateState?.();
+      })
       .catch(() => {
         setUpdateError(true);
-        setEdit(true);
         wait(3000).then(() => setUpdateError(false));
         setTempArray([]);
       });
@@ -158,7 +161,6 @@ export const App: React.FC = () => {
           deletTodo={deleteTodo}
           array={tempArray}
           setTempArray={temp}
-          edit={edit}
         />
 
         {tempTodo && (

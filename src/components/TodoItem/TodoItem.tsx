@@ -5,7 +5,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 
 type Props = {
   todo: Todo;
-  updateTodo?: (todo: Todo) => Promise<void>;
+  updateTodo?: (todo: Todo, func?: VoidFunction) => void;
   deletTodo?: (todo: Todo) => void;
   tempArray: Todo[];
   setTempArray: (todo: Todo) => void;
@@ -33,15 +33,19 @@ export const TodoItem: React.FC<Props> = ({
     deletTodo(todo);
   };
 
-  const handleDoubleClick = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleTempTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTempTitle(event.target.value);
+  };
+
+  const successUpdateState = () => {
+    setIsEdited(false);
   };
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
 
     if (!tempTitle) {
-      handleDeleteButton();
+      deletTodo(todo);
     }
 
     if (todo.title === tempTitle) {
@@ -53,16 +57,18 @@ export const TodoItem: React.FC<Props> = ({
 
       const newTodo = { ...todo, title: tempTitle.trim() };
 
-      return updateTodo(newTodo);
+      updateTodo(newTodo, successUpdateState);
     }
-
-    setIsEdited(false);
   };
 
   const handleOnEsc = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Escape') {
       setIsEdited(false);
     }
+  };
+
+  const handleDoubleClick = () => {
+    setIsEdited(true);
   };
 
   return (
@@ -85,9 +91,7 @@ export const TodoItem: React.FC<Props> = ({
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onDoubleClick={() => {
-              setIsEdited(true);
-            }}
+            onDoubleClick={handleDoubleClick}
           >
             {todo.title}
           </span>
@@ -113,7 +117,7 @@ export const TodoItem: React.FC<Props> = ({
             type="text"
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
-            onChange={handleDoubleClick}
+            onChange={handleTempTitleChange}
             onBlur={handleFormSubmit}
             onKeyUp={handleOnEsc}
           />
