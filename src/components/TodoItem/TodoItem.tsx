@@ -5,7 +5,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 
 type Props = {
   todo: Todo;
-  updateTodo?: (todo: Todo, func?: VoidFunction) => void;
+  updateTodo?: (todo: Todo) => Promise<void>;
   deleteTodo?: (todo: Todo) => void;
   tempArray: Todo[];
   setTempArray: (todo: Todo) => void;
@@ -18,7 +18,6 @@ export const TodoItem: React.FC<Props> = ({
   deleteTodo = () => {},
   tempArray,
   setTempArray,
-  edit,
 }) => {
   const [isEdited, setIsEdited] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
@@ -60,10 +59,10 @@ export const TodoItem: React.FC<Props> = ({
 
       const newTodo = { ...todo, title: tempTitle.trim() };
 
-      updateTodo(newTodo);
+      updateTodo(newTodo).then(() => {
+        setIsEdited(false);
+      });
     }
-
-    setIsEdited(edit);
   };
 
   const handleOnEsc = (event: React.KeyboardEvent<HTMLInputElement>) => {

@@ -103,11 +103,12 @@ export const App: React.FC = () => {
         setEdit(false);
         // successUpdateState?.();
       })
-      .catch(() => {
+      .catch(error => {
         setEdit(true);
         setUpdateError(true);
         wait(3000).then(() => setUpdateError(false));
         setTempArray([]);
+        throw error;
       });
   }
 

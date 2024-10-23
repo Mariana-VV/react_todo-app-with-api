@@ -3,7 +3,7 @@ import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
-  updateTodo: (todo: Todo) => void;
+  updateTodo: (todo: Todo) => Promise<void>;
   deleteTodo: (todo: Todo) => void;
   array: Todo[];
   setTempArray: (todo: Todo) => void;

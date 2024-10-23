@@ -8,7 +8,7 @@ type Props = {
   todos: Todo[];
   onSubmit: (title: string) => Promise<void>;
   setTitleError: (value: boolean) => void;
-  updateTodo: (todo: Todo) => void;
+  updateTodo: (todo: Todo) => Promise<void>;
   setTempArray: (todo: Todo) => void;
 };
 
