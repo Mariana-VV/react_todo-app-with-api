@@ -5,8 +5,8 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 
 type Props = {
   todo: Todo;
-  updateTodo?: (todo: Todo) => Promise<void>;
-  deleteTodo?: (todo: Todo) => void;
+  updateTodo: (todo: Todo) => Promise<void>;
+  deleteTodo: (todo: Todo) => void;
   tempArray: Todo[];
   setTempArray: (todo: Todo) => void;
   edit: boolean;
@@ -14,8 +14,8 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  updateTodo = () => {},
-  deleteTodo = () => {},
+  updateTodo,
+  deleteTodo,
   tempArray,
   setTempArray,
 }) => {

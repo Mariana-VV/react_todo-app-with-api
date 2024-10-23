@@ -170,6 +170,8 @@ export const App: React.FC = () => {
         {tempTodo && (
           <TodoItem
             todo={tempTodo}
+            updateTodo={updateTodo}
+            deleteTodo={deleteTodo}
             tempArray={tempArray}
             setTempArray={temp}
             edit={edit}
