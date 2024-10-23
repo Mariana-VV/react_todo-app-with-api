@@ -4,17 +4,19 @@ import { TodoItem } from '../TodoItem/TodoItem';
 type Props = {
   todos: Todo[];
   updateTodo: (todo: Todo) => void;
-  deletTodo: (todo: Todo) => void;
+  deleteTodo: (todo: Todo) => void;
   array: Todo[];
   setTempArray: (todo: Todo) => void;
+  edit: boolean;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   updateTodo,
-  deletTodo,
+  deleteTodo,
   array,
   setTempArray,
+  edit,
 }) => {
   return (
     <>
@@ -24,9 +26,10 @@ export const TodoList: React.FC<Props> = ({
           <TodoItem
             todo={todo}
             updateTodo={updateTodo}
-            deletTodo={deletTodo}
+            deleteTodo={deleteTodo}
             tempArray={array}
             setTempArray={setTempArray}
+            edit={edit}
           />
         </section>
       ))}

@@ -6,17 +6,19 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 type Props = {
   todo: Todo;
   updateTodo?: (todo: Todo, func?: VoidFunction) => void;
-  deletTodo?: (todo: Todo) => void;
+  deleteTodo?: (todo: Todo) => void;
   tempArray: Todo[];
   setTempArray: (todo: Todo) => void;
+  edit: boolean;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   updateTodo = () => {},
-  deletTodo = () => {},
+  deleteTodo = () => {},
   tempArray,
   setTempArray,
+  edit,
 }) => {
   const [isEdited, setIsEdited] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
@@ -30,23 +32,23 @@ export const TodoItem: React.FC<Props> = ({
 
   const handleDeleteButton = () => {
     setTempArray(todo);
-    deletTodo(todo);
+    deleteTodo(todo);
   };
 
   const handleTempTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTempTitle(event.target.value);
   };
 
-  const successUpdateState = () => {
-    setIsEdited(false);
-  };
+  // const successUpdateState = () => {
+  //   setIsEdited(false);
+  // };
 
   const handleFormSubmit = (event: FormEvent) => {
     event.preventDefault();
 
     if (!tempTitle) {
       setTempArray(todo);
-      deletTodo(todo);
+      deleteTodo(todo);
     }
 
     if (todo.title === tempTitle) {
@@ -58,8 +60,10 @@ export const TodoItem: React.FC<Props> = ({
 
       const newTodo = { ...todo, title: tempTitle.trim() };
 
-      updateTodo(newTodo, successUpdateState);
+      updateTodo(newTodo);
     }
+
+    setIsEdited(edit);
   };
 
   const handleOnEsc = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -70,6 +74,20 @@ export const TodoItem: React.FC<Props> = ({
 
   const handleDoubleClick = () => {
     setIsEdited(true);
+  };
+
+  const handleOnBlur = () => {
+    if (todo.title === tempTitle) {
+      setIsEdited(false);
+    }
+
+    if (todo.title !== tempTitle) {
+      setTempArray(todo);
+
+      const newTodo = { ...todo, title: tempTitle.trim() };
+
+      updateTodo(newTodo);
+    }
   };
 
   return (
@@ -119,7 +137,7 @@ export const TodoItem: React.FC<Props> = ({
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             onChange={handleTempTitleChange}
-            onBlur={handleFormSubmit}
+            onBlur={handleOnBlur}
             onKeyUp={handleOnEsc}
           />
         </form>

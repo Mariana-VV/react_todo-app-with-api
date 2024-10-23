@@ -40,6 +40,7 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState('all');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [tempArray, setTempArray] = useState<Todo[]>([]);
+  const [edit, setEdit] = useState(false);
 
   const temp = (currentTodo: Todo) => {
     setTempArray(prevArray => [...prevArray, currentTodo]);
@@ -48,7 +49,7 @@ export const App: React.FC = () => {
   const filteredTodos = getTodosByStatus(status, todos);
 
   async function addTodo(newTodoTitle: string) {
-    const editedTitle = newTodoTitle.trim();
+    const editedTitle = newTodoTitle.trim(); //повторение, в онсабмит мі уже єто делали
 
     if (!editedTitle) {
       setTitleError(true);
@@ -71,11 +72,11 @@ export const App: React.FC = () => {
         })
         .then(newTodo => {
           setTodos(prevTodos => [...prevTodos, newTodo]);
-          setTempTodo(null);
+          setTempTodo(null); //повторение
         })
         .catch(error => {
           setAddError(true);
-          setTempTodo(null);
+          setTempTodo(null); //повторение
           wait(3000).then(() => setAddError(false));
           throw error;
         });
@@ -84,7 +85,7 @@ export const App: React.FC = () => {
 
   async function updateTodo(
     updatedTodo: Todo,
-    successUpdateState?: VoidFunction,
+    // successUpdateState?: VoidFunction,
   ): Promise<void> {
     return todosFromServer
       .updateTodos(updatedTodo)
@@ -99,10 +100,11 @@ export const App: React.FC = () => {
 
           return newTodos;
         });
-
-        successUpdateState?.();
+        setEdit(false);
+        // successUpdateState?.();
       })
       .catch(() => {
+        setEdit(true);
         setUpdateError(true);
         wait(3000).then(() => setUpdateError(false));
         setTempArray([]);
@@ -158,13 +160,19 @@ export const App: React.FC = () => {
         <TodoList
           todos={filteredTodos}
           updateTodo={updateTodo}
-          deletTodo={deleteTodo}
+          deleteTodo={deleteTodo}
           array={tempArray}
           setTempArray={temp}
+          edit={edit}
         />
 
         {tempTodo && (
-          <TodoItem todo={tempTodo} tempArray={tempArray} setTempArray={temp} />
+          <TodoItem
+            todo={tempTodo}
+            tempArray={tempArray}
+            setTempArray={temp}
+            edit={edit}
+          />
         )}
 
         {!!todos.length && (

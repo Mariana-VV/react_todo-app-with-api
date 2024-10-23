@@ -51,6 +51,7 @@ export const TodoForm: React.FC<Props> = ({
   };
 
   const handleToggleAllTodo = () => {
+    // проблема
     todos.forEach(currentTodo => {
       setTempArray(currentTodo);
       if (!currentTodo.completed) {
@@ -81,6 +82,7 @@ export const TodoForm: React.FC<Props> = ({
     <>
       {/* this button should have `active` class only if all todos are completed */}
       {!!todos.length && (
+        //   что значит !!
         <button
           type="button"
           className={classNames('todoapp__toggle-all', { active: trig })}
