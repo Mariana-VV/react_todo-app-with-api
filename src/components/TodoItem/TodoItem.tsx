@@ -106,7 +106,7 @@ export const TodoItem: React.FC<Props> = ({
 
   useEffect(() => {
     titleField.current?.focus();
-  }, [titleField]);
+  }, [titleField, isEdited]);
 
   return (
     <div
