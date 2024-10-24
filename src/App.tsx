@@ -155,6 +155,7 @@ export const App: React.FC = () => {
             todos={todos}
             updateTodo={updateTodo}
             setTempArray={temp}
+            edit={edit}
           />
         </header>
 
@@ -164,7 +165,7 @@ export const App: React.FC = () => {
           deleteTodo={deleteTodo}
           array={tempArray}
           setTempArray={temp}
-          edit={edit}
+          edit={updateError}
         />
 
         {tempTodo && (
@@ -174,7 +175,7 @@ export const App: React.FC = () => {
             deleteTodo={deleteTodo}
             tempArray={tempArray}
             setTempArray={temp}
-            edit={edit}
+            edit={updateError}
           />
         )}
 

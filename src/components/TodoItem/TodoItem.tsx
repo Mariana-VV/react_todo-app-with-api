@@ -18,6 +18,7 @@ export const TodoItem: React.FC<Props> = ({
   deleteTodo,
   tempArray,
   setTempArray,
+  edit,
 }) => {
   const [isEdited, setIsEdited] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
@@ -60,12 +61,16 @@ export const TodoItem: React.FC<Props> = ({
 
       const newTodo = { ...todo, title: tempTitle.trim() };
 
+      setIsEdited(true);
+
+
       updateTodo(newTodo)
         .then(() => {
           setIsEdited(false);
         })
         .catch(() => {
           setIsEdited(true);
+
         });
     }
   };
@@ -94,19 +99,27 @@ export const TodoItem: React.FC<Props> = ({
 
       const newTodo = { ...todo, title: tempTitle.trim() };
 
+      setIsEdited(true);
+
       updateTodo(newTodo)
+
         .then(() => {
           setIsEdited(false);
         })
         .catch(() => {
           setIsEdited(true);
+
         });
+
     }
   };
 
   useEffect(() => {
-    titleField.current?.focus();
-  }, [titleField, isEdited]);
+    if (edit) {
+      titleField.current?.focus();
+
+    }
+  }, [titleField, edit]);
 
   return (
     <div
@@ -149,7 +162,7 @@ export const TodoItem: React.FC<Props> = ({
           <input
             name="title"
             value={tempTitle}
-            autoFocus
+            autoFocus={isEdited}
             ref={titleField}
             data-cy="TodoTitleField"
             type="text"

@@ -10,6 +10,7 @@ type Props = {
   setTitleError: (value: boolean) => void;
   updateTodo: (todo: Todo) => Promise<void>;
   setTempArray: (todo: Todo) => void;
+  edit: boolean;
 };
 
 export const TodoForm: React.FC<Props> = ({
@@ -18,6 +19,7 @@ export const TodoForm: React.FC<Props> = ({
   todos,
   updateTodo,
   setTempArray,
+
 }) => {
   const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +27,9 @@ export const TodoForm: React.FC<Props> = ({
   const trig = todos.every(({ completed }) => completed);
 
   useEffect(() => {
-    titleField.current?.focus();
+
+      titleField.current?.focus();
+    
   }, [title, isSubmitting, todos]);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
