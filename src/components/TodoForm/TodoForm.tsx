@@ -26,7 +26,7 @@ export const TodoForm: React.FC<Props> = ({
 
   useEffect(() => {
     titleField.current?.focus();
-  }, [title, isSubmitting, onSubmit]);
+  }, [title, isSubmitting, todos]);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);

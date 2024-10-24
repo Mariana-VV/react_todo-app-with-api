@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 
 type Props = {
   todo: Todo;
@@ -21,6 +21,7 @@ export const TodoItem: React.FC<Props> = ({
 }) => {
   const [isEdited, setIsEdited] = useState(false);
   const [tempTitle, setTempTitle] = useState(todo.title);
+  const titleField = useRef<HTMLInputElement>(null);
 
   const handleIsCompleted = (paramTodo: Todo) => {
     setTempArray(todo);
@@ -59,9 +60,13 @@ export const TodoItem: React.FC<Props> = ({
 
       const newTodo = { ...todo, title: tempTitle.trim() };
 
-      updateTodo(newTodo).then(() => {
-        setIsEdited(false);
-      });
+      updateTodo(newTodo)
+        .then(() => {
+          setIsEdited(false);
+        })
+        .catch(() => {
+          setIsEdited(true);
+        });
     }
   };
 
@@ -80,14 +85,28 @@ export const TodoItem: React.FC<Props> = ({
       setIsEdited(false);
     }
 
+    if (!tempTitle) {
+      deleteTodo(todo);
+    }
+
     if (todo.title !== tempTitle) {
       setTempArray(todo);
 
       const newTodo = { ...todo, title: tempTitle.trim() };
 
-      updateTodo(newTodo);
+      updateTodo(newTodo)
+        .then(() => {
+          setIsEdited(false);
+        })
+        .catch(() => {
+          setIsEdited(true);
+        });
     }
   };
+
+  useEffect(() => {
+    titleField.current?.focus();
+  }, [titleField]);
 
   return (
     <div
@@ -128,9 +147,10 @@ export const TodoItem: React.FC<Props> = ({
         // {/* This form is shown instead of the title and remove button */}
         <form onSubmit={handleFormSubmit}>
           <input
-            // name="title"
+            name="title"
             value={tempTitle}
             autoFocus
+            ref={titleField}
             data-cy="TodoTitleField"
             type="text"
             className="todo__title-field"
