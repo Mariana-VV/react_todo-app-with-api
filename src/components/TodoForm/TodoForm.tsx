@@ -19,7 +19,6 @@ export const TodoForm: React.FC<Props> = ({
   todos,
   updateTodo,
   setTempArray,
-
 }) => {
   const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,9 +26,7 @@ export const TodoForm: React.FC<Props> = ({
   const trig = todos.every(({ completed }) => completed);
 
   useEffect(() => {
-
-      titleField.current?.focus();
-    
+    titleField.current?.focus();
   }, [title, isSubmitting, todos]);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
