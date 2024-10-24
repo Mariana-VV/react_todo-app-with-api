@@ -49,6 +49,8 @@ export const TodoItem: React.FC<Props> = ({
     if (!tempTitle) {
       setTempArray(todo);
       deleteTodo(todo);
+
+      return;
     }
 
     if (todo.title === tempTitle) {
@@ -60,7 +62,7 @@ export const TodoItem: React.FC<Props> = ({
 
       const newTodo = { ...todo, title: tempTitle.trim() };
 
-      setIsEdited(true);
+      // setIsEdited(true);
 
       updateTodo(newTodo)
         .then(() => {
@@ -89,6 +91,8 @@ export const TodoItem: React.FC<Props> = ({
 
     if (!tempTitle) {
       deleteTodo(todo);
+
+      return;
     }
 
     if (todo.title !== tempTitle) {

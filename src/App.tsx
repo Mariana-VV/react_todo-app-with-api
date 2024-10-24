@@ -49,7 +49,7 @@ export const App: React.FC = () => {
   const filteredTodos = getTodosByStatus(status, todos);
 
   async function addTodo(newTodoTitle: string) {
-    const editedTitle = newTodoTitle.trim(); //повторение, в онсабмит мі уже єто делали
+    const editedTitle = newTodoTitle.trim();
 
     if (!editedTitle) {
       setTitleError(true);
@@ -72,11 +72,11 @@ export const App: React.FC = () => {
         })
         .then(newTodo => {
           setTodos(prevTodos => [...prevTodos, newTodo]);
-          setTempTodo(null); //повторение
+          setTempTodo(null);
         })
         .catch(error => {
           setAddError(true);
-          setTempTodo(null); //повторение
+          setTempTodo(null);
           wait(3000).then(() => setAddError(false));
           throw error;
         });
@@ -122,7 +122,9 @@ export const App: React.FC = () => {
       )
       .catch(() => {
         setDeleteError(true);
-        wait(3000).then(() => setDeleteError(false));
+        wait(3000).then(() => {
+          setDeleteError(false);
+        });
       });
   };
 
